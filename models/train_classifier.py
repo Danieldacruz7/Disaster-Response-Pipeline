@@ -2,9 +2,9 @@ import sys
 import pandas as pd
 import numpy as np 
 
-from sqlalchemy import create_engine
-import re
-import nltk
+from sqlalchemy import create_engine # Interact with SQL database
+import re # Import regular expression library
+import nltk # Import Natural Language Toolkit
 from nltk.tokenize import word_tokenize
 nltk.download('words')
 nltk.download('punkt')
@@ -14,70 +14,74 @@ from nltk.stem import WordNetLemmatizer
 nltk.download(['punkt', 'wordnet'])
 from sklearn.metrics import confusion_matrix
 
-from sklearn.pipeline import Pipeline
+from sklearn.pipeline import Pipeline 
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.multioutput import MultiOutputClassifier
-from sklearn.metrics import classification_report
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report # Reporting F1 score 
 from sklearn.model_selection import GridSearchCV
 
-import pickle
+import pickle # Library for saving and loading model file
 
 def load_data(database_filepath):
+    """ Load a previously created database. """
     engine = create_engine("sqlite:///{}".format(database_filepath))
     df = pd.read_sql("SELECT * FROM DisasterText", engine)
-    df['related'].replace(2, 1, inplace=True)
-    X = df['message']
-    y = df.iloc[:, 3:]
-    category_names = y.columns
+    df['related'].replace(2, 1, inplace=True) # Data cleaning step to replace irrelevant 2's 
+    X = df['message'] # Creating the feature dataframe
+    y = df.iloc[:, 3:] # Creating the target dataframe
+    category_names = y.columns # Saving the labels
     
     return X, y, category_names
 
 
 def tokenize(text):
-    text.lower()
+    """ Converting words to tokenized words. """
+    text.lower() # Convert entire text to lowercase. 
     text = re.sub(r"[^a-zA-Z0-9]", " ", text.lower()) 
     
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
 
-    clean_tokens = []
-    for tok in tokens:
-        clean_tok = lemmatizer.lemmatize(tok).lower().strip()
+    cleaned_tokens = []
+    for i in tokens:
+        clean_tok = lemmatizer.lemmatize(i).lower().strip()
         clean_tokens.append(clean_tok)
     
-    return clean_tokens
+    return cleaned_tokens
 
 
 def build_model():
-    pipeline2 = Pipeline([
+    """ Creating the model pipeline to allow for multiple parameter testing, and selecting best performing model. """
+    pipeline = Pipeline([
         
     ('vect', CountVectorizer(tokenizer=tokenize)),
     ('tfidf', TfidfTransformer()),
     ('clf', MultiOutputClassifier(RandomForestClassifier()))
-    ])
+    ]) 
     
     parameters = {
     'clf__estimator__n_estimators': [50, 100],
     'clf__estimator__min_samples_split': [2, 3],
     }
-    cv = GridSearchCV(pipeline2, param_grid=parameters)
+    cv = GridSearchCV(pipeline, param_grid=parameters)
     
     return cv
     
    
 def evaluate_model(model, X_test, Y_test, category_names):
+    """Evaluation of model performance. """
     y_pred = model.predict(X_test)
     for i in range(len(Y_test.columns)):
         print(Y_test.columns[i])
-        print(classification_report(np.array(Y_test)[i], y_pred[i]))
+        print(classification_report(np.array(Y_test)[i], y_pred[i])) # Reporting F1 scores
         i += 1
     
     
     labels = np.unique(y_pred)
     Y_test = np.array(Y_test)
-    confusion_mat = confusion_matrix(Y_test.argmax(axis=1), y_pred.argmax(axis=1), labels=labels)
+    confusion_mat = confusion_matrix(Y_test.argmax(axis=1), y_pred.argmax(axis=1), labels=labels) # Constructing confusion matrix
     accuracy = (y_pred == Y_test).mean()
 
     print("Labels:", labels)
@@ -85,9 +89,10 @@ def evaluate_model(model, X_test, Y_test, category_names):
     print("Accuracy:", accuracy)
     print("\nBest Parameters:", model.best_params_)
     
-    return model.best_params_
+    return model.best_params_ # Returning best performing model
 
 def save_model(model, model_filepath):
+    """Saving the model in a Pickle file. """
     pickle.dump(model, open('classifier.pkl', 'wb'))
 
 
@@ -96,10 +101,10 @@ def main():
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
         X, Y, category_names = load_data(database_filepath)
-        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2) # Splitting training and testing data
         
         print('Building model...')
-        model = build_model()
+        model = build_model() 
         
         print('Training model...')
         model.fit(X_train, Y_train)
