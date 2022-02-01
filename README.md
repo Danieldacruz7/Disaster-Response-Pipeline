@@ -9,7 +9,7 @@ Project for creating an Natural Language Processing (NLP) pipeline for recognizi
 4. [How To Interact With the Project](https://github.com/Danieldacruz7/Disaster-Response-Pipeline#how-to-interact-with-the-project)
 
 ## Project Motivation:
-One of the most important challenges in an emergency is the speed at which we respond to a disaster. The quicker the response, the quicker people are able to help in the case of a disaster. Thanks to the growth of social media platforms and the exponential growth of textual data, we are able to identify the presence of an emergency with seconds.
+One of the most important challenges in an emergency is the speed at which we respond to a disaster. The quicker the response, the quicker people are able to help in the case of a disaster. Thanks to the growth of social media platforms and the exponential growth of textual data, we are able to identify the presence of an emergency within seconds.
 
 Using natural language processing, we can categorize text to identify the type of help that is required. Although this is an immense undertaking, we can start by categorizing disaster responses into different subcategories.
 
