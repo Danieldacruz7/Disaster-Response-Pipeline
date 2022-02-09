@@ -1,7 +1,5 @@
 # Disaster-Response-Pipeline
 
--- IN PROGRESS --
-
 Project for creating an Natural Language Processing (NLP) pipeline for recognizing a disaster response.
 
 ## Table of Contents
