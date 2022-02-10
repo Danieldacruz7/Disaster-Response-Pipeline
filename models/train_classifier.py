@@ -55,17 +55,16 @@ def tokenize(text):
 def build_model():
     """ Creating the model pipeline to allow for multiple parameter testing, and selecting best performing model. """
     pipeline = Pipeline([
-        
-    ('vect', CountVectorizer(tokenizer=tokenize)),
-    ('tfidf', TfidfTransformer()),
-    ('clf', MultiOutputClassifier(RandomForestClassifier()))
-    ]) 
-    
+
+        ('vect', CountVectorizer()),
+        ('tfidf', TfidfTransformer()),
+        ('clf', MultiOutputClassifier(RandomForestClassifier()))
+    ])
+
     parameters = {
-    'clf__estimator__n_estimators': [50, 100],
-    'clf__estimator__min_samples_split': [2, 3],
+        'clf__estimator__n_estimators': [5],
     }
-    cv = GridSearchCV(pipeline, param_grid=parameters)
+    cv = GridSearchCV(pipeline, param_grid=parameters, cv=2, verbose=3)
     
     return cv
     
