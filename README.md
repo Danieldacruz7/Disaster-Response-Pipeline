@@ -41,4 +41,4 @@ The project consists of three main folders - app, data and model.
 ## How To Interact With the Project:
 If you would like to create the NLP model, use git clone to download the project. Then run the project in the sequence of process_data.py, train_classifier.py and finally the run.py file to deploy the application.
 
-Alternatively, you can view the application @. The app is hosted on Heroku on a free subscription plan. (Reducing model size is required for upload. Application is not running yet.)
+Alternatively, you can view the application @. The app is hosted on Heroku on a free subscription plan. (File is functional but application is not running yet. Currently debugging on Heroku server)
