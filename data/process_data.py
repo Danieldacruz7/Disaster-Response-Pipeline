@@ -29,6 +29,7 @@ def load_data(messages_filepath, categories_filepath):
 def clean_data(df):
     """Cleaning data for database insertion. """
     df.drop_duplicates(keep=False, inplace=True) # Remove duplicates from data
+    df['related'].replace(2, 1, inplace=True) # Replace 2's with 1's
     
     return df # Returned cleaned dataframe
 
