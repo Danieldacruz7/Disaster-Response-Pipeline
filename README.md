@@ -39,6 +39,6 @@ The project consists of three main folders - app, data and model.
 3. The model folder contains the code that will extract information from the database, and fit the data onto a machine learning pipeline and output an NLP model. This model will classify text as different disaster responses.
 
 ## How To Interact With the Project:
-If you would like to create the NLP model, use git clone to download the project. Then run the project in the sequence of process_data.py, train_classifier.py and finally the run.py file to deploy the application.
+If you would like to create the NLP model, use "git clone" to download the project. Then run the project in the sequence of process_data.py, train_classifier.py and finally the run.py file to deploy the application.
 
-Alternatively, you can view the application @. The app is hosted on Heroku on a free subscription plan. (File is functional but application is not running yet. Currently debugging on Heroku server)
+The application can be hosted on the local machine, or can be hosted on Platform-as-a-service such as Heroku.
