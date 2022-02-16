@@ -28,7 +28,7 @@ def load_data(database_filepath):
     """ Load a previously created database. """
     engine = create_engine("sqlite:///{}".format(database_filepath))
     df = pd.read_sql("SELECT * FROM DisasterText", engine)
-    df['related'].replace(2, 1, inplace=True) # Data cleaning step to replace irrelevant 2's 
+    #df['related'].replace(2, 1, inplace=True) # Data cleaning step to replace irrelevant 2's 
     X = df['message'] # Creating the feature dataframe
     y = df.iloc[:, 3:] # Creating the target dataframe
     category_names = y.columns # Saving the labels

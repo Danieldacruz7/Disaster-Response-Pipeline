@@ -32,7 +32,19 @@ df = pd.read_sql_table('DisasterText', engine)
 
 # load model
 with open("models/classifier.pkl", 'rb') as f:
-    model = pickle.load(f))
+    model = pickle.load(f)
+
+def genre_distribution(df):
+    genre_distribution = []
+    genre_names = []
+    for i in df:
+        genre_names.append(i)
+        genre_distribution.append(df[i].where(df[i] == 1).count())
+
+    del genre_names[0:3]
+    del genre_distribution[0:3]
+    return genre_names, genre_distribution
+just_genre_names, genre_distribution = genre_distribution(df)
 
 
 # index webpage displays cool visuals and receives user input text for model
@@ -63,6 +75,24 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=just_genre_names,
+                    y=genre_distribution
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Disaster Responses',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Disaster Responses"
                 }
             }
         }
